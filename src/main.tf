@@ -17,8 +17,12 @@ resource "github_repository" "repo" {
   name        = var.repository_name
   description = "Repository for Terraform managed settings"
   visibility  = "public"
-  # Test next line
-  default_branch = var.branch
+  auto_init   = true
+}
+
+resource "github_branch" "development" {
+  repository = github_repository.repo.name
+  branch     = var.branch
 }
 
 # Add collaborator to the repository
@@ -88,25 +92,25 @@ resource "tls_private_key" "deploy_key" {
 
 # Add the ssh key as a deploy key
 resource "github_repository_deploy_key" "repository_deploy_key" {
-  title      = "Repository deploy key"
+  title      = "DEPLOY_KEY"
   repository = github_repository.repo.name
   key        = tls_private_key.deploy_key.public_key_openssh
   read_only  = true
 }
 
 # Add a PAT secret to GitHub Actions
-# resource "github_actions_secret" "pat" {
-#   repository  = github_repository.repo.name
-#   secret_name = "PAT"
-#   plaintext_value = var.pat_token
-# }
+resource "github_actions_secret" "pat" {
+  repository      = github_repository.repo.name
+  secret_name     = "PAT"
+  plaintext_value = var.pat_token
+}
 
 # Store the Terraform code as a repository secret
-# resource "github_actions_secret" "terraform_code" {
-#   repository      = github_repository.repo.name
-#   secret_name     = "TERRAFORM"
-#   plaintext_value = filebase64("${path.module}/terraform.tf")
-# }
+resource "github_actions_secret" "terraform_code" {
+  repository      = github_repository.repo.name
+  secret_name     = "TERRAFORM"
+  plaintext_value = var.terraform_secret
+}
 
 # Discord server webhook
 resource "github_repository_webhook" "discord_pr_notification" {

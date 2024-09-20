@@ -23,4 +23,13 @@ variable "branch" {
   type        = string
 }
 
+variable "pat_token" {
+  description = "PAT token"
+  type        = string
+}
+
+variable "terraform_secret" {
+  description = "Terraform secret"
+  type        = string
+}
 
