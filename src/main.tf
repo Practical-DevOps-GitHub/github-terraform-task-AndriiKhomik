@@ -9,7 +9,6 @@ terraform {
 
 # Initialize the GitHub provider
 provider "github" {
-  # owner = var.github_organization
   token = var.token
 }
 
@@ -18,13 +17,15 @@ resource "github_repository" "repo" {
   name        = var.repository_name
   description = "Repository for Terraform managed settings"
   visibility  = "public"
+  # Test next line
+  default_branch = var.branch
 }
 
 # Add collaborator to the repository
 resource "github_repository_collaborator" "collabprator" {
   repository = github_repository.repo.name
   username   = var.username
-  permission = var.collabprator_permission
+  permission = var.collaborator_permission
 }
 
 # Create and protect the 'develop' branch
@@ -34,7 +35,7 @@ resource "github_branch" "develop" {
 }
 
 resource "github_branch_protection" "develop_protection" {
-  repository_id = github_repository.repo.node_id
+  repository_id = github_repository.repo.name
   pattern       = var.branch
 
   required_pull_request_reviews {
@@ -46,7 +47,7 @@ resource "github_branch_protection" "develop_protection" {
 
 # Create and protect the 'main' branch
 resource "github_branch_protection" "main_protection" {
-  repository_id = github_repository.repo.node_id
+  repository_id = github_repository.repo.name
   pattern       = "main"
 
   required_pull_request_reviews {

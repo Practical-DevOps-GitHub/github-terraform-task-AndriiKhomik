@@ -3,13 +3,8 @@ variable "token" {
   type        = string
 }
 
-variable "github_organization" {
-  description = "github_organization"
-  type        = string
-}
-
 variable "username" {
-  description = "username"
+  description = "Username"
   type        = string
 }
 
@@ -18,7 +13,7 @@ variable "repository_name" {
   type        = string
 }
 
-variable "collabprator_permission" {
+variable "collaborator_permission" {
   description = "Collaborator permission"
   type        = string
 }
