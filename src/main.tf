@@ -14,14 +14,14 @@ provider "github" {
 
 # Define the repository
 resource "github_repository" "repo" {
-  name        = var.repository_name
+  name        = "github-terraform-task-AndriiKhomik"
   description = "Repository for Terraform managed settings"
   visibility  = "public"
   auto_init   = true
 }
 
 resource "github_branch" "development" {
-  repository = github_repository.repo.name
+  repository = "github-terraform-task-AndriiKhomik"
   branch     = "develop"
 }
 
@@ -126,7 +126,7 @@ resource "github_actions_secret" "terraform_code" {
 
     # Define the repository
     resource "github_repository" "repo" {
-    name        = var.repository_name
+    name        = "github-terraform-task-AndriiKhomik"
     description = "Repository for Terraform managed settings"
     visibility  = "public"
     auto_init   = true
@@ -134,25 +134,25 @@ resource "github_actions_secret" "terraform_code" {
 
     resource "github_branch" "development" {
     repository = github_repository.repo.name
-    branch     = var.branch
+    branch     = "develop"
     }
 
     # Add collaborator to the repository
     resource "github_repository_collaborator" "collabprator" {
     repository = github_repository.repo.name
-    username   = var.username
-    permission = var.collaborator_permission
+    username   = "softservedata"
+    permission = "admin"
     }
 
     # Create and protect the 'develop' branch
     resource "github_branch" "develop" {
     repository = github_repository.repo.name
-    branch     = var.branch
+    branch     = "develop"
     }
 
     resource "github_branch_protection" "develop_protection" {
     repository_id = github_repository.repo.name
-    pattern       = var.branch
+    pattern       = "develop"
 
     required_pull_request_reviews {
         dismiss_stale_reviews           = true
@@ -214,7 +214,7 @@ resource "github_actions_secret" "terraform_code" {
     resource "github_actions_secret" "pat" {
     repository      = github_repository.repo.name
     secret_name     = "PAT"
-    plaintext_value = var.pat_token
+    plaintext_value = "ssh_cvrvrcd_crg435fdsv"
     }
 
     # Store the Terraform code as a repository secret
@@ -235,6 +235,9 @@ resource "github_actions_secret" "terraform_code" {
 
     events = ["pull_request"]
     }
+
+
+
 
 EOT
 }
