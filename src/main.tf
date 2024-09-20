@@ -22,25 +22,25 @@ resource "github_repository" "repo" {
 
 resource "github_branch" "development" {
   repository = github_repository.repo.name
-  branch     = var.branch
+  branch     = "develop"
 }
 
 # Add collaborator to the repository
 resource "github_repository_collaborator" "collabprator" {
   repository = github_repository.repo.name
-  username   = var.username
-  permission = var.collaborator_permission
+  username   = "softservedata"
+  permission = "admin"
 }
 
 # Create and protect the 'develop' branch
 resource "github_branch" "develop" {
   repository = github_repository.repo.name
-  branch     = var.branch
+  branch     = "develop"
 }
 
 resource "github_branch_protection" "develop_protection" {
   repository_id = github_repository.repo.name
-  pattern       = var.branch
+  pattern       = "develop"
 
   required_pull_request_reviews {
     dismiss_stale_reviews           = true
@@ -82,7 +82,7 @@ resource "github_repository_file" "pull_request_template" {
     - [ ] Do we need to implement analytics?
     - [ ] Will this be part of a product update? If yes, please write one phrase about this update
   EOF
-  branch     = var.branch
+  branch     = "develop"
 }
 
 # Generate an ssh key using provider "hashicorp/tls"
